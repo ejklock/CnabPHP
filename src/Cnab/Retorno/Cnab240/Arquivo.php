@@ -9,8 +9,8 @@ class Arquivo implements \Cnab\Retorno\IArquivo
     private $content;
 
     public $header = false;
-    public $lotes = array();
-    public $linhas = array();
+    public $lotes = [];
+    public $linhas = [];
     public $trailer = false;
 
     public $codigo_banco;
@@ -95,7 +95,7 @@ class Arquivo implements \Cnab\Retorno\IArquivo
 
     public function listDetalhes()
     {
-        $detalhes = array();
+        $detalhes = [];
         foreach ($this->lotes as $lote) {
             foreach ($lote->listDetalhes() as $detalhe) {
                 $detalhes[] = $detalhe;

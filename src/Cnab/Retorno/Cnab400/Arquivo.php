@@ -9,8 +9,8 @@ class Arquivo implements \Cnab\Retorno\IArquivo
     private $content;
 
     public $header = false;
-    public $detalhes = array();
-    public $linhas = array();
+    public $detalhes = [];
+    public $linhas = [];
     public $trailer = false;
     public $layoutVersao; // ex: sicoob, sigcb
 
@@ -59,7 +59,7 @@ class Arquivo implements \Cnab\Retorno\IArquivo
                 $this->header->loadFromString($linha);
 
                 $linhaRetorno->linhaCnab = $this->header;
-            } elseif (in_array((int) $tipo_registro, array(1, 7))) {
+            } elseif (in_array((int) $tipo_registro, [1, 7])) {
                 $detalhe = new Detalhe($this);
                 $detalhe->loadFromString($linha);
                 $this->detalhes[] = $detalhe;

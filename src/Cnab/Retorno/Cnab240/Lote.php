@@ -10,7 +10,7 @@ class Lote
     public $arquivo;
     public $codigo_banco;
 
-    public $detalhes = array();
+    public $detalhes = [];
 
     private $lastDetalhe;
 

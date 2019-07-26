@@ -6,7 +6,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
 {
     public $headerArquivo;
     public $headerLote;
-    public $detalhes = array();
+    public $detalhes = [];
     public $trailerLote;
     public $trailerArquivo;
 
@@ -14,7 +14,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
     private $_data_geracao;
     public $banco;
     public $codigo_banco;
-    public $configuracao = array();
+    public $configuracao = [];
     public $layoutVersao;
     const   QUEBRA_LINHA = "\r\n";
 
@@ -29,16 +29,16 @@ class Arquivo implements \Cnab\Remessa\IArquivo
     public function configure(array $params)
     {
         $banco = \Cnab\Banco::getBanco($this->codigo_banco);
-        $campos = array(
+        $campos = [
             'data_geracao', 'data_gravacao', 'nome_fantasia', 'razao_social', 'cnpj', 'logradouro', 'numero', 'bairro',
             'cidade', 'uf', 'cep',
-        );
+        ];
 
         if ($this->codigo_banco == \Cnab\Banco::CEF) {
             $campos[] = 'codigo_cedente';
         }
 
-        if($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
+        if ($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
             $campos[] = 'codigo_convenio';
             $campos[] = 'codigo_carteira';
             $campos[] = 'variacao_carteira';
@@ -52,8 +52,6 @@ class Arquivo implements \Cnab\Remessa\IArquivo
             $campos[] = 'operacao';
             $campos[] = 'numero_sequencial_arquivo';
         }
-
-
 
         foreach ($campos as $campo) {
             if (array_key_exists($campo, $params)) {
@@ -86,7 +84,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
         $this->headerArquivo->agencia = $this->configuracao['agencia'];
         $this->headerArquivo->agencia_dv = $this->configuracao['agencia_dv'];
 
-        if($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
+        if ($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
             $this->headerArquivo->codigo_convenio = $this->configuracao['codigo_convenio'];
             $this->headerArquivo->carteira = $this->configuracao['codigo_carteira'];
             $this->headerArquivo->variacao_carteira = $this->configuracao['variacao_carteira'];
@@ -94,7 +92,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
             $this->headerArquivo->conta_dv = $this->configuracao['conta_dv'];
         }
 
-        if($this->codigo_banco == \Cnab\Banco::CEF) {
+        if ($this->codigo_banco == \Cnab\Banco::CEF) {
             $this->headerArquivo->codigo_cedente = $this->configuracao['codigo_cedente'];
         }
 
@@ -106,7 +104,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
         $this->headerArquivo->numero_sequencial_arquivo = $this->configuracao['numero_sequencial_arquivo'];
 
         if ($this->codigo_banco == \Cnab\Banco::CEF) {
-            if($this->layoutVersao === 'sigcb') {
+            if ($this->layoutVersao === 'sigcb') {
                 $this->headerArquivo->codigo_convenio = 0;
             } else {
                 $codigoConvenio = sprintf(
@@ -127,7 +125,6 @@ class Arquivo implements \Cnab\Remessa\IArquivo
         $this->headerLote->numero_inscricao = $this->headerArquivo->numero_inscricao;
         $this->headerLote->agencia = $this->headerArquivo->agencia;
         $this->headerLote->agencia_dv = $this->headerArquivo->agencia_dv;
-
 
         if ($this->codigo_banco == \Cnab\Banco::CEF) {
             $this->headerLote->codigo_convenio = $this->headerArquivo->codigo_cedente;
@@ -161,7 +158,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
         $soma = 0;
         $fator = 2;
         /* Separacao dos numeros */
-        for ($i = strlen($num); $i > 0; --$i) {
+        for ($i = strlen($num); $i > 0; $i--) {
             // pega cada numero isoladamente
             $numeros[$i] = substr($num, $i - 1, 1);
             // Efetua multiplicacao do numero pelo falor
@@ -171,7 +168,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
             if ($fator == $base) { // restaura fator de multiplicacao para 2
                 $fator = 1;
             }
-            ++$fator;
+            $fator++;
         }
         /* Calculo do modulo 11 */
         if ($r == 0) {
@@ -214,11 +211,11 @@ class Arquivo implements \Cnab\Remessa\IArquivo
 
         $detalhe->segmento_p->nosso_numero = $this->formatarNossoNumero($boleto['nosso_numero']);
 
-        if($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
+        if ($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
             // Informar 1 – para carteira 11/12 na modalidade Simples; 2 ou 3 – para carteira 11/17 modalidade
             // Vinculada/Caucionada e carteira 31; 4 – para carteira 11/17 modalidade Descontada e carteira 51; e 7 – para
             // carteira 17 modalidade Simples.
-            if($boleto['carteira'] == 17 && $boleto['codigo_carteira'] == \Cnab\CodigoCarteira::COBRANCA_SIMPLES) {
+            if ($boleto['carteira'] == 17 && $boleto['codigo_carteira'] == \Cnab\CodigoCarteira::COBRANCA_SIMPLES) {
                 $detalhe->segmento_p->codigo_carteira = 7;
             } else {
                 $detalhe->segmento_p->codigo_carteira = $boleto['codigo_carteira'];
@@ -240,7 +237,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
         $detalhe->segmento_p->especie = $boleto['especie']; // 4 = Duplicata serviço
         $detalhe->segmento_p->aceite = $boleto['aceite'];
         $detalhe->segmento_p->data_emissao = $dateCadastro;
-        $detalhe->segmento_p->codigo_juros_mora = isset($boleto['codigo_juros_mora'])?$boleto['codigo_juros_mora']:1; // 1 = Por dia, 2= Taxa Mensal, 3= Isento
+        $detalhe->segmento_p->codigo_juros_mora = isset($boleto['codigo_juros_mora']) ? $boleto['codigo_juros_mora'] : 1; // 1 = Por dia, 2= Taxa Mensal, 3= Isento
 
         if (!empty($boleto['dias_iniciar_contagem_juros']) && is_numeric($boleto['dias_iniciar_contagem_juros'])) {
             $dateJurosMora->modify("+{$boleto['dias_iniciar_contagem_juros']} days");
@@ -278,8 +275,8 @@ class Arquivo implements \Cnab\Remessa\IArquivo
             $detalhe->segmento_p->codigo_baixa = 0;
             $detalhe->segmento_p->prazo_baixa = 0;
         } else {
-            if(isset($boleto['baixar_apos_dias'])) {
-                if($boleto['baixar_apos_dias'] === false) {
+            if (isset($boleto['baixar_apos_dias'])) {
+                if ($boleto['baixar_apos_dias'] === false) {
                     // não baixar / devolver
                     $detalhe->segmento_p->codigo_baixa = 2;
                     $detalhe->segmento_p->prazo_baixa = 0;
@@ -348,37 +345,41 @@ class Arquivo implements \Cnab\Remessa\IArquivo
 
     public function formatarNossoNumero($nossoNumero)
     {
-        if(!$nossoNumero)
+        if (!$nossoNumero) {
             return $nossoNumero;
+        }
 
         if ($this->codigo_banco == \Cnab\Banco::BANCO_DO_BRASIL) {
             $codigo_convenio = $this->configuracao['codigo_convenio'];
 
-            if(strlen($codigo_convenio) <= 4) {
-                # Convênio de 4 digitos
-                if(strlen($nossoNumero) > 7) {
+            if (strlen($codigo_convenio) <= 4) {
+                // Convênio de 4 digitos
+                if (strlen($nossoNumero) > 7) {
                     throw new \InvalidArgumentException(
-                        "Para número de convênio de 4 posições o nosso número deve ter no máximo 7 posições (sem o digito)"
+                        'Para número de convênio de 4 posições o nosso número deve ter no máximo 7 posições (sem o digito)'
                     );
                 }
                 $number = sprintf('%04d%07d', $codigo_convenio, $nossoNumero);
-                return $number . $this->mod11($number);
+
+                return $number.$this->mod11($number);
             } elseif (strlen($codigo_convenio) <= 6) {
-                # Convênio de 6 digitos
-                if(strlen($nossoNumero) > 5) {
+                // Convênio de 6 digitos
+                if (strlen($nossoNumero) > 5) {
                     throw new \InvalidArgumentException(
-                        "Para número de convênio de 6 posições o nosso número deve ter no máximo 5 posições (sem o digito)"
+                        'Para número de convênio de 6 posições o nosso número deve ter no máximo 5 posições (sem o digito)'
                     );
                 }
                 $number = sprintf('%06d%05d', $codigo_convenio, $nossoNumero);
-                return $number . $this->mod11($number);
+
+                return $number.$this->mod11($number);
             } else {
-                if(strlen($nossoNumero) > 10) {
+                if (strlen($nossoNumero) > 10) {
                     throw new \InvalidArgumentException(
-                        "Para número de convênio de 7 posições o nosso número deve ter no máximo 10 posições"
+                        'Para número de convênio de 7 posições o nosso número deve ter no máximo 10 posições'
                     );
                 }
                 $number = sprintf('%07d%010d', $codigo_convenio, $nossoNumero);
+
                 return $number;
             }
         }
@@ -404,7 +405,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
     private function removeAccents($string)
     {
         return preg_replace(
-            array(
+            [
                     '/\xc3[\x80-\x85]/',
                     '/\xc3\x87/',
                     '/\xc3[\x88-\x8b]/',
@@ -420,7 +421,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                     '/\xc3[\xb9-\xbc]/',
                     '/\xC2\xAA/',
                     '/\xC2\xBA/',
-            ),
+            ],
             str_split('ACEIOUaceiouao', 1),
             $this->isUtf8($string) ? $string : utf8_encode($string)
         );
@@ -462,10 +463,10 @@ class Arquivo implements \Cnab\Remessa\IArquivo
         $dados .= $this->headerLote->getEncoded().self::QUEBRA_LINHA;
 
         foreach ($this->detalhes as $detalhe) {
-            ++$qtde_titulo_cobranca_simples;
+            $qtde_titulo_cobranca_simples++;
             $valor_total_titulo_simples += $detalhe->segmento_p->valor_titulo;
             foreach ($detalhe->listSegmento() as $segmento) {
-                ++$qtde_registro_lote;
+                $qtde_registro_lote++;
                 $segmento->numero_sequencial_lote = $numero_sequencial_lote++;
             }
 

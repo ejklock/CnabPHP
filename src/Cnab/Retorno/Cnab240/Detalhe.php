@@ -31,7 +31,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
 
     public static function isBaixaStatic($codigo_movimento)
     {
-        $tipo_baixa = array(6, 9, 17, 25);
+        $tipo_baixa = [6, 9, 17, 25];
         $codigo_movimento = (int) $codigo_movimento;
         if (in_array($codigo_movimento, $tipo_baixa)) {
             return true;
@@ -47,7 +47,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
      */
     public function isBaixaRejeitada()
     {
-        $tipo_baixa = array(3, 26, 30);
+        $tipo_baixa = [3, 26, 30];
         $codigo_movimento = (int) $this->segmento_t->codigo_movimento;
         if (in_array($codigo_movimento, $tipo_baixa)) {
             return true;
@@ -188,7 +188,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
             );
         }
 
-        if (in_array($this->codigo_banco, array(\Cnab\Banco::SANTANDER))) {
+        if (in_array($this->codigo_banco, [\Cnab\Banco::SANTANDER])) {
             // retira o dv
             $nossoNumero = substr($nossoNumero, 0, -1);
         }
@@ -335,7 +335,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     {
         $codigo = (int) $this->getCodigo();
 
-        $table = array(
+        $table = [
              2 => 'Entrada Confirmada',
              3 => 'Entrada Rejeitada',
              4 => 'Transferência de Carteira/Entrada',
@@ -363,7 +363,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
             51 => 'Título DDA reconhecido pelo sacado',
             52 => 'Título DDA não reconhecido pelo sacado',
             53 => 'Título DDA recusado pela CIP',
-        );
+        ];
 
         if (array_key_exists($codigo, $table)) {
             return $table[$codigo];
@@ -373,7 +373,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     }
 
     /**
-     * Retorna o código de liquidação, normalmente usado para 
+     * Retorna o código de liquidação, normalmente usado para
      * saber onde o cliente efetuou o pagamento.
      *
      * @return string
@@ -381,11 +381,10 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     public function getCodigoLiquidacao()
     {
         // @TODO: Resgatar o código de liquidação
-        return;
     }
 
     /**
-     * Retorna a descrição do código de liquidação, normalmente usado para 
+     * Retorna a descrição do código de liquidação, normalmente usado para
      * saber onde o cliente efetuou o pagamento.
      *
      * @return string
@@ -393,7 +392,6 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     public function getDescricaoLiquidacao()
     {
         // @TODO: Resgator descrição do código de liquidação
-        return;
     }
 
     public function dump()

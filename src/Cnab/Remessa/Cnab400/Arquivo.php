@@ -6,12 +6,12 @@ class Arquivo implements \Cnab\Remessa\IArquivo
 {
     public $header;
     public $trailer;
-    public $detalhes = array();
+    public $detalhes = [];
     private $_data_gravacao;
     private $_data_geracao;
     public $banco;
     public $codigo_banco;
-    public $configuracao = array();
+    public $configuracao = [];
     public $layout_versao;
     const   QUEBRA_LINHA = "\r\n";
 
@@ -25,10 +25,10 @@ class Arquivo implements \Cnab\Remessa\IArquivo
 
     public function configure(array $params)
     {
-        $campos = array(
+        $campos = [
             'data_geracao', 'data_gravacao', 'nome_fantasia', 'razao_social', 'cnpj', 'logradouro', 'numero', 'bairro',
-            'cidade', 'uf', 'cep', 'agencia', 'conta'
-        );
+            'cidade', 'uf', 'cep', 'agencia', 'conta',
+        ];
 
         switch ($this->codigo_banco) {
             case \Cnab\Banco::CEF:
@@ -43,8 +43,8 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                 $campos[] = 'agencia_dac';
                 $campos[] = 'conta_dac';
                 $campos[] = 'numero_sequencial';
-                $campos[] = 'numero_convenio';                
-                break;                
+                $campos[] = 'numero_convenio';
+                break;
             default:
                 $campos[] = 'conta_dac';
                 break;
@@ -89,8 +89,8 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                 $this->header->agencia_dv = $this->configuracao['agencia_dac'];
                 $this->header->conta_dv = $this->configuracao['conta_dac'];
                 $this->header->numero_sequencial = $this->configuracao['numero_sequencial'];
-                $this->header->convenio_lider = $this->configuracao['numero_convenio'];                
-                break;                    
+                $this->header->convenio_lider = $this->configuracao['numero_convenio'];
+                break;
             default:
                 $this->header->conta_dv = $this->configuracao['conta_dac'];
                 break;
@@ -103,10 +103,10 @@ class Arquivo implements \Cnab\Remessa\IArquivo
     public function insertDetalhe(array $boleto, $tipo = 'remessa')
     {
         $dateVencimento = $boleto['data_vencimento'] instanceof \DateTime ? $boleto['data_vencimento'] : new \DateTime($boleto['data_vencimento']);
-        $dateCadastro = $boleto['data_cadastro']   instanceof \DateTime ? $boleto['data_cadastro']   : new \DateTime($boleto['data_cadastro']);
+        $dateCadastro = $boleto['data_cadastro']   instanceof \DateTime ? $boleto['data_cadastro'] : new \DateTime($boleto['data_cadastro']);
 
         $detalhe = new Detalhe($this);
-        $complementos = array();
+        $complementos = [];
 
         if ($tipo == 'remessa') {
             $detalhe->codigo_ocorrencia = !empty($boleto['codigo_de_ocorrencia']) ? $boleto['codigo_de_ocorrencia'] : '1';
@@ -117,13 +117,13 @@ class Arquivo implements \Cnab\Remessa\IArquivo
             if (\Cnab\Banco::BRADESCO == $this->codigo_banco) {
                 $detalhe->codigo_cedente = $this->header->codigo_cedente;
                 $detalhe->digito_nosso_numero = $boleto['digito_nosso_numero'];
-            } else if (\Cnab\Banco::CEF == $this->codigo_banco) {
+            } elseif (\Cnab\Banco::CEF == $this->codigo_banco) {
                 $detalhe->codigo_cedente = $this->header->codigo_cedente;
                 $detalhe->taxa_de_permanencia = $boleto['taxa_de_permanencia'];
                 $detalhe->mensagem = $boleto['mensagem'];
                 $detalhe->data_multa = $boleto['data_multa'];
                 $detalhe->valor_multa = $boleto['valor_multa'];
-            } else if (\Cnab\Banco::BANCO_DO_BRASIL == $this->codigo_banco) {
+            } elseif (\Cnab\Banco::BANCO_DO_BRASIL == $this->codigo_banco) {
                 $detalhe->agencia = $this->header->agencia;
                 $detalhe->agencia_dv = $this->header->agencia_dv;
                 $detalhe->conta = $this->header->conta;
@@ -131,13 +131,12 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                 $detalhe->numero_convenio = $boleto['numero_convenio'];
                 $detalhe->variacao_carteira = $boleto['variacao_carteira'];
                 $detalhe->tipo_cobranca = (isset($boleto['tipo_cobranca']) ?: '');
-
             } else {
                 $detalhe->agencia = $this->header->agencia;
                 $detalhe->conta = $this->header->conta;
                 $detalhe->conta_dv = $this->header->conta_dv;
                 $detalhe->codigo_instrucao = '0';
-                $detalhe->qtde_moeda = '0'; # Este campo deverá ser preenchido com zeros caso a moeda seja o Real.
+                $detalhe->qtde_moeda = '0'; // Este campo deverá ser preenchido com zeros caso a moeda seja o Real.
                 $detalhe->codigo_carteira = 'I';
                 $detalhe->uso_banco = '';
                 $detalhe->data_mora = $boleto['data_multa'];
@@ -165,8 +164,8 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                ocorrência 35 – Cancelamento de Instrução e 38 – Cedente não concorda com alegação do sacado. Para
                os demais códigos de ocorrência este campo deverá ser preenchido com zeros.
             */
-            $detalhe->uso_empresa = isset($boleto['uso_empresa']) 
-                                  ? $boleto['uso_empresa'] 
+            $detalhe->uso_empresa = isset($boleto['uso_empresa'])
+                                  ? $boleto['uso_empresa']
                                   : $boleto['nosso_numero'];
             $detalhe->nosso_numero = $boleto['nosso_numero'];
 
@@ -197,7 +196,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                 $detalhe->sacado_numero_inscricao = $this->prepareText($boleto['sacado_cpf'], '.-/');
                 $detalhe->nome = $this->prepareText($boleto['sacado_nome']);
             }
-            
+
             $detalhe->logradouro = $this->prepareText($boleto['sacado_logradouro']);
             $detalhe->bairro = $this->prepareText($boleto['sacado_bairro']);
             $detalhe->cep = str_replace('-', '', $boleto['sacado_cep']);
@@ -224,7 +223,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
             $detalhe->codigo_ocorrencia = $boleto['codigo_de_ocorrencia'];
             $detalhe->uso_empresa = $boleto['nosso_numero'];
             $detalhe->nosso_numero = $boleto['nosso_numero'];
-            $detalhe->qtde_moeda = '0'; # Este campo deverá ser preenchido com zeros caso a moeda seja o Real.
+            $detalhe->qtde_moeda = '0'; // Este campo deverá ser preenchido com zeros caso a moeda seja o Real.
             $detalhe->numero_carteira = $boleto['carteira'];
             $detalhe->codigo_carteira = 'I';
             $detalhe->uso_banco = '';
@@ -277,7 +276,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
     private function removeAccents($string)
     {
         return preg_replace(
-            array(
+            [
                     '/\xc3[\x80-\x85]/',
                     '/\xc3\x87/',
                     '/\xc3[\x88-\x8b]/',
@@ -291,7 +290,7 @@ class Arquivo implements \Cnab\Remessa\IArquivo
                     '/\xc3[\xac-\xaf]/',
                     '/\xc3([\xb2-\xb6]|\xb8)/',
                     '/\xc3[\xb9-\xbc]/',
-            ),
+            ],
             str_split('ACEIOUaceiou', 1),
             $this->isUtf8($string) ? $string : utf8_encode($string)
         );

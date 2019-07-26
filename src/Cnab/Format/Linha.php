@@ -4,7 +4,7 @@ namespace Cnab\Format;
 
 class Linha
 {
-    private $fields = array();
+    private $fields = [];
     public $last_error = false;
 
     public function __set($key, $valor)

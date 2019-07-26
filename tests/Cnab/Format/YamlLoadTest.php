@@ -2,8 +2,8 @@
 
 namespace Cnab\Tests\Format;
 
-use Cnab\Format\YamlLoad;
 use Cnab\Format\Linha;
+use Cnab\Format\YamlLoad;
 
 define('CNAB_FIXTURE_PATH', dirname(__FILE__).'/../../fixtures/yaml');
 
@@ -17,14 +17,14 @@ class YamlLoadTest extends \PHPUnit_Framework_TestCase
     {
         $yamlLoad = new YamlLoad(0);
 
-        $fields = array(
-            'codigo_banco' => array(
-                'pos' => array(1, 3),
-            ),
-            'tipo_registro' => array(
-                'pos' => array(1, 4),
-            ),
-        );
+        $fields = [
+            'codigo_banco' => [
+                'pos' => [1, 3],
+            ],
+            'tipo_registro' => [
+                'pos' => [1, 4],
+            ],
+        ];
 
         $yamlLoad->validateCollision($fields);
     }
@@ -33,20 +33,20 @@ class YamlLoadTest extends \PHPUnit_Framework_TestCase
     {
         $yamlLoad = new YamlLoad(0);
 
-        $fields1 = array(
-            'codigo_banco' => array(
-                'pos' => array(1, 3),
-            ),
-            'tipo_registro' => array(
-                'pos' => array(4, 4),
-            ),
-        );
+        $fields1 = [
+            'codigo_banco' => [
+                'pos' => [1, 3],
+            ],
+            'tipo_registro' => [
+                'pos' => [4, 4],
+            ],
+        ];
 
-        $fields2 = array(
-            'codigo_banco' => array(
-                'pos' => array(1, 3),
-            ),
-        );
+        $fields2 = [
+            'codigo_banco' => [
+                'pos' => [1, 3],
+            ],
+        ];
 
         $this->assertTrue($yamlLoad->validateCollision($fields1));
         $this->assertTrue($yamlLoad->validateCollision($fields2));
@@ -57,28 +57,28 @@ class YamlLoadTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmiteExceptionEmArrayMalformado()
     {
-        $array = array(
-            'generic' => array(
-                'codigo_banco' => array(
-                    'pos' => array(1, 3),
+        $array = [
+            'generic' => [
+                'codigo_banco' => [
+                    'pos'     => [1, 3],
                     'picture' => '',
-                ),
-                'tipo_registro' => array(
-                    'pos' => array(4, 4),
+                ],
+                'tipo_registro' => [
+                    'pos'     => [4, 4],
                     'picture' => '',
-                ),
-            ),
-            '033' => array(
-                'nome_empresa' => array(
-                    'pos' => array(40, 80),
+                ],
+            ],
+            '033' => [
+                'nome_empresa' => [
+                    'pos'     => [40, 80],
                     'picture' => '',
-                ),
-                'numero_inscricao' => array(
-                    'pos' => array(79, 80),
+                ],
+                'numero_inscricao' => [
+                    'pos'     => [79, 80],
                     'picture' => '',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $yamlLoad = new YamlLoad(0);
         $yamlLoad->validateArray($array);
@@ -86,28 +86,28 @@ class YamlLoadTest extends \PHPUnit_Framework_TestCase
 
     public function testNaoEmiteExceptionEmArrayValido()
     {
-        $array = array(
-            'generic' => array(
-                'codigo_banco' => array(
-                    'pos' => array(1, 3),
+        $array = [
+            'generic' => [
+                'codigo_banco' => [
+                    'pos'     => [1, 3],
                     'picture' => '',
-                ),
-                'tipo_registro' => array(
-                    'pos' => array(4, 4),
+                ],
+                'tipo_registro' => [
+                    'pos'     => [4, 4],
                     'picture' => '',
-                ),
-            ),
-            '033' => array(
-                'nome_empresa' => array(
-                    'pos' => array(40, 80),
+                ],
+            ],
+            '033' => [
+                'nome_empresa' => [
+                    'pos'     => [40, 80],
                     'picture' => '',
-                ),
-                'numero_inscricao' => array(
-                    'pos' => array(81, 81),
+                ],
+                'numero_inscricao' => [
+                    'pos'     => [81, 81],
                     'picture' => '',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $yamlLoad = new YamlLoad(0);
         $this->assertTrue($yamlLoad->validateArray($array));
@@ -116,16 +116,16 @@ class YamlLoadTest extends \PHPUnit_Framework_TestCase
     public function testBuscaFormatoGenericoEEspecifico()
     {
         $yamlLoad = $this->getMockBuilder('\Cnab\Format\YamlLoad')
-                         ->setMethods(array('loadYaml'))
-                         ->setConstructorArgs(array(33))
+                         ->setMethods(['loadYaml'])
+                         ->setConstructorArgs([33])
                          ->getMock();
 
-        $testFormat = array(
-            'codigo_banco' => array(
-                'pos' => array(1, 3),
+        $testFormat = [
+            'codigo_banco' => [
+                'pos'     => [1, 3],
                 'picture' => '9(3)',
-            ),
-        );
+            ],
+        ];
 
         $yamlLoad->expects($this->at(0))
                  ->method('loadYaml')
