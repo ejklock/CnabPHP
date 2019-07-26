@@ -29,9 +29,9 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     public static function isBaixaStatic($codigo, $banco = null)
     {
         if ($banco == 1) { //Banco do Brasil
-            $tipo_baixa = array(6);
+            $tipo_baixa = [6];
         } else {
-            $tipo_baixa = array(9, 10, 32, 47, 59, 72);
+            $tipo_baixa = [9, 10, 32, 47, 59, 72];
         }
 
         $codigo_ocorrencia = (int) $codigo;
@@ -49,7 +49,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
      */
     public function isBaixaRejeitada()
     {
-        $tipo_baixa = array(15);
+        $tipo_baixa = [15];
         $codigo_ocorrencia = (int) $this->codigo_de_ocorrencia;
         if (in_array($codigo_ocorrencia, $tipo_baixa)) {
             return true;
@@ -152,7 +152,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
         return trim($this->numero_do_documento);
     }
 
-    /** 
+    /**
      * Retorna o nosso número do boleto (sem o digito).
      *
      * @return string
@@ -534,7 +534,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     }
 
     /**
-     * Retorna o código de liquidação, normalmente usado para 
+     * Retorna o código de liquidação, normalmente usado para
      * saber onde o cliente efetuou o pagamento.
      *
      * @return string
@@ -544,12 +544,10 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
         if ($this->existField('codigo_liquidacao')) {
             return $this->codigo_liquidacao;
         }
-
-        return;
     }
 
     /**
-     * Retorna a descrição do código de liquidação, normalmente usado para 
+     * Retorna a descrição do código de liquidação, normalmente usado para
      * saber onde o cliente efetuou o pagamento.
      *
      * @return string
@@ -558,10 +556,10 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
     {
         // @TODO: Usar YAML (cnab_yaml) para criar tabela de descrição
         $codigoLiquidacao = $this->getCodigoLiquidacao();
-        $tabela = array();
+        $tabela = [];
 
         if (\Cnab\Banco::ITAU == $this->_codigo_banco) {
-            $tabela = array(
+            $tabela = [
                 'AA' => 'CAIXA ELETRÔNICO BANCO ITAÚ',
                 'AC' => 'PAGAMENTO EM CARTÓRIO AUTOMATIZADO',
                 'AO' => 'ACERTO ONLINE',
@@ -586,14 +584,12 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
                 'Q0' => 'AGENDAMENTO – PAGAMENTO AGENDADO VIA BANKLINE OU OUTRO CANAL ELETRÔNICO E LIQUIDADO NA DATA INDICADA',
                 'RA' => 'DIGITAÇÃO – REALIMENTAÇÃO AUTOMÁTICA',
                 'ST' => 'PAGAMENTO VIA SELTEC**',
-            );
+            ];
         }
 
         if (array_key_exists($codigoLiquidacao, $tabela)) {
             return $tabela[$codigoLiquidacao];
         }
-
-        return;
     }
 
     public function isDDA()
@@ -612,7 +608,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
             if ($this->getCodigo() == 25) {
                 $alegacoes = str_split($this->erros, 4);
 
-                $tabelaAlegacao = array(
+                $tabelaAlegacao = [
                     '1313' => 'SOLICITA A PRORROGAÇÃO DO VENCIMENTO',
                     '1321' => 'SOLICITA A DISPENSA DOS JUROS DE MORA',
                     '1339' => 'NÃO RECEBEU A MERCADORIA',
@@ -646,7 +642,7 @@ class Detalhe extends \Cnab\Format\Linha implements \Cnab\Retorno\IDetalhe
                     '1826' => 'ENDEREÇO DE E-MAIL INVÁLIDO/COBRANÇA MENSAGEM. BOLETO ENVIADO PELO CORREIO',
                     '1834' => 'BOLETO DDA, DIVIDA RECONHECIDA PELO PAGADOR',
                     '1842' => 'BOLETO DDA, DIVIDA NÃO RECONHECIDA PELO PAGADOR',
-                );
+                ];
 
                 foreach ($alegacoes as $alegacao) {
                     if (array_key_exists($alegacao, $tabelaAlegacao)) {

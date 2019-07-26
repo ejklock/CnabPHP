@@ -1,5 +1,7 @@
 <?php
+
 // espécies de cobranças
+
 namespace Cnab;
 
 class Especie

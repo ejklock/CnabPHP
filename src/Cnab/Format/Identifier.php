@@ -41,7 +41,7 @@ class Identifier
 
         if ($bytes == 400) {
             $codigo_banco = \substr($lines[0], 76, 3);
-            $codigo_tipo = \substr($lines[0],  1, 1);
+            $codigo_tipo = \substr($lines[0], 1, 1);
             $tipo = null;
 
             if ($codigo_tipo == '1') {
@@ -51,10 +51,10 @@ class Identifier
             }
         } elseif ($bytes == 240) {
             $codigo_banco = \substr($lines[0], 0, 3);
-            $codigo_tipo = \substr($lines[0],  142, 1);
+            $codigo_tipo = \substr($lines[0], 142, 1);
             $tipo = null;
 
-            // Pega a Versao do Layout da CEF 
+            // Pega a Versao do Layout da CEF
             if (\Cnab\Banco::CEF == $codigo_banco) {
                 $layout_versao = \substr($lines[0], 163, 3);
 
@@ -76,12 +76,12 @@ class Identifier
             return;
         }
 
-        $result = array(
-            'banco' => $codigo_banco,
-            'tipo' => $tipo,
-            'bytes' => $bytes,
+        $result = [
+            'banco'         => $codigo_banco,
+            'tipo'          => $tipo,
+            'bytes'         => $bytes,
             'layout_versao' => $layout_versao,
-        );
+        ];
 
         return $result;
     }

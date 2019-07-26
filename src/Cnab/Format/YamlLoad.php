@@ -9,9 +9,9 @@ class YamlLoad
     public $codigo_banco = null;
     public $formatPath;
     public $layoutVersao;
-    
-    protected static $loaded = array();
-    
+
+    protected static $loaded = [];
+
     public function __construct($codigo_banco, $layoutVersao = null)
     {
         $this->codigo_banco = $codigo_banco;
@@ -64,7 +64,7 @@ class YamlLoad
     {
         $this->validateArray($array);
 
-        $keys = array('generic');
+        $keys = ['generic'];
         if (array_key_exists(sprintf('%03d', $this->codigo_banco), $array)) {
             $keys[] = sprintf('%03d', $this->codigo_banco);
         }
@@ -88,10 +88,11 @@ class YamlLoad
     {
         if (!isset(static::$loaded[$filename])) {
             if (!file_exists($filename)) {
-                return; 
-            } 
+                return;
+            }
             static::$loaded[$filename] = spyc_load_file($filename);
         }
+
         return static::$loaded[$filename];
     }
 
@@ -113,7 +114,7 @@ class YamlLoad
         $arrayPadrao = $this->loadYaml($filenamePadrao);
         $arrayEspecifico = $this->loadYaml($filenameEspecifico);
 
-        $arrayFormat = array();
+        $arrayFormat = [];
 
         if ($arrayPadrao) {
             $arrayFormat['generic'] = $arrayPadrao;

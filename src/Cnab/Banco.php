@@ -13,30 +13,30 @@ class Banco
     public static function getBanco($codigo)
     {
         if ($codigo == self::BANCO_DO_BRASIL) {
-            return array(
+            return [
                 'codigo_do_banco' => self::BANCO_DO_BRASIL,
-                'nome_do_banco' => 'BANCO DO BRASIL S.A.',
-            );
+                'nome_do_banco'   => 'BANCO DO BRASIL S.A.',
+            ];
         } elseif ($codigo == self::ITAU) {
-            return array(
+            return [
                 'codigo_do_banco' => self::ITAU,
-                'nome_do_banco' => 'BANCO ITAU SA',
-            );
+                'nome_do_banco'   => 'BANCO ITAU SA',
+            ];
         } elseif ($codigo == self::CEF) {
-            return array(
+            return [
                 'codigo_do_banco' => self::CEF,
-                'nome_do_banco' => 'CAIXA ECONOMICA FEDERAL',
-            );
+                'nome_do_banco'   => 'CAIXA ECONOMICA FEDERAL',
+            ];
         } elseif ($codigo == self::SANTANDER) {
-            return array(
+            return [
                 'codigo_do_banco' => self::SANTANDER,
-                'nome_do_banco' => 'BANCO SANTANDER (BRASIL) S/A',
-            );
+                'nome_do_banco'   => 'BANCO SANTANDER (BRASIL) S/A',
+            ];
         } elseif ($codigo == self::BRADESCO) {
-            return array(
+            return [
                 'codigo_do_banco' => self::BRADESCO,
-                'nome_do_banco' => 'BRADESCO',
-            );
+                'nome_do_banco'   => 'BRADESCO',
+            ];
         } else {
             return false;
         }

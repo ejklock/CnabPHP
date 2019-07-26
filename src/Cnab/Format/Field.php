@@ -49,6 +49,7 @@ class Field
             $this->valor_encoded = Picture::encode($valor, $this->format, $this->options);
         } catch (\Exception $e) {
             trigger_error("Error in field '$this->nome': ".$e->getMessage(), E_USER_NOTICE);
+
             throw $e; // para exibir o backtrace
         }
 

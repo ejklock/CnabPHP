@@ -36,11 +36,11 @@ class Detalhe
      */
     public function listSegmento()
     {
-        return array(
+        return [
             $this->segmento_p,
             $this->segmento_q,
             $this->segmento_r,
-        );
+        ];
     }
 
     /**
@@ -50,7 +50,7 @@ class Detalhe
      */
     public function getEncoded()
     {
-        $text = array();
+        $text = [];
         foreach ($this->listSegmento() as $segmento) {
             $text[] = $segmento->getEncoded();
         }

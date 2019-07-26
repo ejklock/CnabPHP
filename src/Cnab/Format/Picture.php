@@ -17,7 +17,7 @@ class Picture
 
     public static function getLength($format)
     {
-        $m = array();
+        $m = [];
         if (preg_match(self::REGEX_VALID_FORMAT, $format, $m)) {
             return (int) $m['tamanho1'] + (int) $m['tamanho2'];
         } else {
@@ -38,7 +38,7 @@ class Picture
 
     public static function encode($value, $format, $options)
     {
-        $m = array();
+        $m = [];
         if (\preg_match(self::REGEX_VALID_FORMAT, $format, $m)) {
             if ($m['tipo1'] == 'X' && !$m['tipo2']) {
                 $value = \substr($value, 0, $m['tamanho1']);
@@ -95,7 +95,7 @@ class Picture
 
     public static function decode($value, $format, $options)
     {
-        $m = array();
+        $m = [];
         if (preg_match(self::REGEX_VALID_FORMAT, $format, $m)) {
             if ($m['tipo1'] == 'X' && !$m['tipo2']) {
                 return rtrim($value);
@@ -105,8 +105,8 @@ class Picture
                     $tamanho_right = (int) $m['tamanho2'];
                     $valor_left = self::parseNumber(substr($value, 0, $tamanho_left));
                     $valor_right = '0.'.substr($value, $tamanho_left, $tamanho_right);
-                    if ((double) $valor_right > 0) {
-                        return $valor_left + (double) $valor_right;
+                    if ((float) $valor_right > 0) {
+                        return $valor_left + (float) $valor_right;
                     } else {
                         return self::parseNumber($valor_left);
                     }
